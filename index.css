@@ -1,0 +1,501 @@
+/* Reset e estilos gerais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+:root {
+    --primary: #3498db;     /* Azul principal */
+    --primary-dark: #2980b9; /* Azul mais escuro */
+    --primary-light: #cfe8f9; /* Azul claro */
+    --accent: #1e88e5;      /* Azul de destaque */
+    --dark-bg: #0f1923;     /* Fundo escuro */
+    --card-bg: #152735;     /* Fundo do cartão */
+    --card-header: #1c3548; /* Cabeçalho do cartão */
+    --text: #ffffff;        /* Texto principal */
+    --text-muted: #8395a7;  /* Texto secundário */
+    --border: #2c3e50;      /* Bordas */
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Cabeçalho */
+header {
+    background-color: #071219;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: -0.5px;
+}
+
+.logo span {
+    color: var(--text);
+}
+
+.user-actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 14px;
+}
+
+.btn-login {
+    background-color: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+}
+
+.btn-login:hover {
+    background-color: rgba(52, 152, 219, 0.1);
+    transform: translateY(-2px);
+}
+
+.btn-register {
+    background-color: var(--primary);
+    border: none;
+    color: #ffffff;
+    box-shadow: 0 4px 6px rgba(52, 152, 219, 0.2);
+}
+
+.btn-register:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(52, 152, 219, 0.3);
+}
+
+/* Navegação */
+nav {
+    background-color: #122331;
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 8px 0;
+}
+
+.nav-link:hover {
+    color: var(--primary);
+}
+
+.nav-link.active {
+    color: var(--primary);
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--primary);
+    border-radius: 3px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: var(--card-header);
+    border-radius: 8px;
+    padding: 8px 15px;
+}
+
+.search-bar input {
+    background: transparent;
+    border: none;
+    color: var(--text);
+    outline: none;
+    width: 150px;
+}
+
+.search-bar input::placeholder {
+    color: var(--text-muted);
+}
+
+/* Banner Principal */
+.main-banner {
+    height: 350px;
+    background: url('banner.png') no-repeat center center/cover; /* Substitua pelo caminho da sua imagem */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+
+.main-banner h1 {
+    font-size: 42px;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    color: var(--primary);
+}
+
+.main-banner p {
+    font-size: 18px;
+    max-width: 800px;
+    margin-bottom: 30px;
+    color: var(--text-muted);
+}
+
+.banner-cta {
+    background-color: var(--primary);
+    color: #ffffff;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.banner-cta:hover {
+    background-color: var(--primary-dark);
+    transform: scale(1.05);
+}
+
+/* Conteúdo principal */
+.main-content {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Seções */
+.section {
+    margin-bottom: 40px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-size: 24px;
+    position: relative;
+    padding-left: 20px;
+    font-weight: 700;
+}
+
+.section-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 70%;
+    width: 6px;
+    background-color: var(--primary);
+    border-radius: 3px;
+}
+
+.see-all {
+    color: var(--primary);
+    font-weight: 500;
+}
+
+/* Jogos ao vivo */
+.live-games {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.game-card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.game-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+}
+
+.game-header {
+    background-color: var(--card-header);
+    padding: 18px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.game-league {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.live-indicator {
+    display: flex;
+    align-items: center;
+    color: #ff6b6b;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.live-indicator::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background-color: #ff6b6b;
+    border-radius: 50%;
+    margin-right: 5px;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+}
+
+.game-content {
+    padding: 20px;
+}
+
+.game-teams {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 40%;
+}
+
+.team-logo {
+    width: 50px;
+    height: 50px;
+    background-color: var(--card-header);
+    border-radius: 50%;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+.team-name {
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.game-score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.score {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.game-time {
+    color: #ff6b6b;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.game-odds {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.odd-button {
+    background-color: var(--card-header);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 0;
+    width: 30%;
+    color: var(--text);
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.odd-button:hover {
+    background-color: #2c3e50;
+}
+
+.odd-value {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 3px;
+}
+
+.odd-label {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* Rodapé */
+footer {
+    background-color: #071219;
+    padding: 40px 0 20px;
+    border-top: 1px solid var(--border);
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.footer-column h3 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.footer-column h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background-color: var(--primary);
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-link {
+    margin-bottom: 10px;
+    color: var(--text-muted);
+    transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+    color: var(--primary);
+}
+
+.payment-methods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.payment-icon {
+    width: 40px;
+    height: 25px;
+    background-color: var(--card-header);
+    border-radius: 3px;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid var(--card-header);
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.responsible-gaming {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #122331;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .live-games {
+        grid-template-columns: 1fr;
+    }
+
+    .nav-links {
+        gap: 15px;
+    }
+
+    .page-title h1 {
+        font-size: 28px;
+    }
+}

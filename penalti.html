@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resenha.bet - Bater Pênaltis</title>
+    <link rel="stylesheet" href="apostar.css"> <!-- Reutilize o CSS existente -->
+</head>
+<body>
+    <!-- Cabeçalho -->
+    <header>
+        <div class="header-container">
+            <div class="logo">resenha<span>.bet</span></div>
+            <div class="user-actions">
+                <div id="userInfo">
+                    <span id="usernameDisplay"></span>
+                    <span id="userBalance"></span>
+                </div>
+                <div id="loginActions">
+                    <a href="login.html" class="btn btn-login">Entrar</a>
+                    <a href="login.html" class="btn btn-register">Cadastre-se</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Início</a>
+                <a href="apostar.html" class="nav-link">Apostar Só Resenha</a>
+                <a href="penaltis.html" class="nav-link active">Bater Pênaltis</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <div class="main-content">
+        <div class="page-title">
+            <h1>Bater Pênaltis</h1>
+            <p>Escolha um valor de aposta e tente marcar gols para multiplicar seu dinheiro!</p>
+        </div>
+
+        <!-- Área do Jogo -->
+        <div class="game-container">
+            <div class="bet-amount">
+                <label for="betValue">Valor da Aposta:</label>
+                <input type="number" id="betValue" placeholder="R$10,00" min="1">
+                <button id="startGame" class="btn btn-register">Iniciar Jogo</button>
+            </div>
+
+            <div class="game-area">
+                <div class="goal">
+                    <div class="goal-top-left" data-canto="1"></div>
+                    <div class="goal-top-center" data-canto="2"></div>
+                    <div class="goal-top-right" data-canto="3"></div>
+                    <div class="goal-bottom-left" data-canto="4"></div>
+                    <div class="goal-bottom-center" data-canto="5"></div>
+                    <div class="goal-bottom-right" data-canto="6"></div>
+                </div>
+                <img src="lejardo.png" alt="Goleiro" id="goalkeeper" class="goalkeeper">
+            </div>
+
+            <div class="game-info">
+                <p>Saldo Atual: <span id="currentBalance">R$0,00</span></p>
+                <p>Valor da Aposta Atual: <span id="currentBet">R$0,00</span></p>
+                <p>Próximo Ganho: <span id="potentialGain">R$0,00</span></p>
+                <button id="cashOut" class="btn btn-login" disabled>Finalizar Aposta</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 Resenha.bet</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Função para obter valor de cookies
+        function getCookie(name) {
+            const cname = name + "=";
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const ca = decodedCookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(cname) === 0) {
+                    return c.substring(cname.length, c.length);
+                }
+            }
+            return "";
+        }
+    
+        // Função para atualizar o saldo no cookie
+        function updateBalance(newBalance) {
+            const date = new Date();
+            date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000)); // 7 dias de validade
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = "resenha_balance=" + newBalance + ";" + expires + ";path=/";
+        }
+    
+        // Verificar se o usuário está logado
+        window.onload = function () {
+            const username = getCookie("resenha_username");
+            const balance = getCookie("resenha_balance");
+    
+            if (username) {
+                document.getElementById("usernameDisplay").textContent = username;
+                document.getElementById("userBalance").textContent = "R$" + parseFloat(balance).toFixed(2);
+                document.getElementById("userInfo").style.display = "flex"; 
+                document.getElementById("loginActions").style.display = "none"; // Esconde os botões de login
+            } else {
+                // Redirecionar para a página de login se não estiver logado
+                window.location.href = "login.html";
+            }
+    
+            // Elementos do DOM
+            const betValueInput = document.getElementById("betValue");
+            const startGameButton = document.getElementById("startGame");
+            const cashOutButton = document.getElementById("cashOut");
+            const currentBalanceDisplay = document.getElementById("currentBalance");
+            const currentBetDisplay = document.getElementById("currentBet");
+            const potentialGainDisplay = document.getElementById("potentialGain");
+            const goalAreas = document.querySelectorAll(".goal div");
+    
+            let currentBalance = parseFloat(balance);
+            let currentBet = 0;
+            let multiplier = 1;
+    
+            // Atualizar o saldo atual
+            currentBalanceDisplay.textContent = "R$" + currentBalance.toFixed(2);
+    
+            // Iniciar o jogo
+            startGameButton.addEventListener("click", () => {
+                const betValue = parseFloat(betValueInput.value);
+    
+                if (!betValue || betValue <= 0) {
+                    alert("Por favor, insira um valor válido para a aposta.");
+                    return;
+                }
+    
+                if (betValue > currentBalance) {
+                    alert("Saldo insuficiente para realizar a aposta.");
+                    return;
+                }
+    
+                // Deduzir o valor da aposta do saldo
+                currentBalance -= betValue;
+                currentBet = betValue;
+                multiplier = 1;
+    
+                // Atualizar exibições
+                currentBalanceDisplay.textContent = "R$" + currentBalance.toFixed(2);
+                currentBetDisplay.textContent = "R$" + currentBet.toFixed(2);
+                potentialGainDisplay.textContent = "R$" + (currentBet * multiplier).toFixed(2);
+    
+                // Habilitar o botão de finalizar
+                cashOutButton.disabled = false;
+    
+                // Iniciar o jogo
+                alert("Jogo iniciado! Escolha um canto para chutar.");
+            });
+    
+            // Finalizar o jogo e levar o dinheiro
+            cashOutButton.addEventListener("click", () => {
+                const totalGain = currentBet * multiplier;
+                currentBalance += totalGain;
+    
+                // Atualizar o saldo no cookie
+                updateBalance(currentBalance.toFixed(2));
+    
+                // Atualizar exibições
+                currentBalanceDisplay.textContent = "R$" + currentBalance.toFixed(2);
+                alert(`Você finalizou o jogo e levou R$${totalGain.toFixed(2)}!`);
+    
+                // Resetar o jogo
+                currentBet = 0;
+                multiplier = 1;
+                currentBetDisplay.textContent = "R$0,00";
+                potentialGainDisplay.textContent = "R$0,00";
+                cashOutButton.disabled = true;
+    
+                // Resetar a posição do goleiro
+                const goalkeeper = document.querySelector(".goalkeeper");
+                goalkeeper.classList.remove(
+                    "goalkeeper-top-left",
+                    "goalkeeper-top-center",
+                    "goalkeeper-top-right",
+                    "goalkeeper-bottom-left",
+                    "goalkeeper-bottom-center",
+                    "goalkeeper-bottom-right"
+                );
+            });
+    
+            // Lógica do chute
+            // Lógica do chute
+            goalAreas.forEach(area => {
+                area.addEventListener("click", () => {
+                    if (currentBet === 0) {
+                        alert("Por favor, inicie o jogo primeiro.");
+                        return;
+                    }
+
+                    const userChoice = parseInt(area.getAttribute("data-canto"));
+                    const goalkeeperChoice = Math.floor(Math.random() * 6) + 1; // Goleiro escolhe aleatoriamente
+
+                    // Função para mapear número para posição do goleiro
+                    function getGoalkeeperClass(choice) {
+                        const positions = ["top-left", "top-center", "top-right", "bottom-left", "bottom-center", "bottom-right"];
+                        return positions[choice - 1];
+                    }
+
+                    // Atualizar a posição do goleiro corretamente
+                    const goalkeeper = document.getElementById("goalkeeper");
+                    goalkeeper.className = "goalkeeper"; // Reseta todas as classes antes de adicionar a nova
+                    goalkeeper.classList.add(`goalkeeper-${getGoalkeeperClass(goalkeeperChoice)}`);
+
+                    // Aguardar a animação do goleiro antes de mostrar o resultado
+                    setTimeout(() => {
+                        if (userChoice === goalkeeperChoice) {
+                            // Goleiro defendeu
+                            alert("O goleiro defendeu! Você perdeu a aposta.");
+                            currentBet = 0;
+                            currentBetDisplay.textContent = "R$0,00";
+                            potentialGainDisplay.textContent = "R$0,00";
+                            cashOutButton.disabled = true;
+
+                            // Atualizar saldo no cookie para não ficar bugado
+                            updateBalance(currentBalance.toFixed(2));
+                        } else {
+                            // Gol! Aumentar o valor da aposta em 10%
+                            currentBet *= 1.1;
+                            alert("Gol! Seu dinheiro foi multiplicado.");
+
+                            // Atualizar exibições
+                            currentBetDisplay.textContent = "R$" + currentBet.toFixed(2);
+                            potentialGainDisplay.textContent = "R$" + (currentBet * 1.1).toFixed(2); // Próximo potencial ganho
+
+                            cashOutButton.disabled = false;
+                        }
+                    }, 300); // 300ms de atraso para a animação do goleiro
+                });
+            });
+
+            // Finalizar o jogo e levar o dinheiro
+            cashOutButton.addEventListener("click", () => {
+                const totalGain = currentBet; // Recebe o valor atual da aposta, não o potencial ganho
+                currentBalance += totalGain;
+
+                // Atualizar o saldo no cookie
+                updateBalance(currentBalance.toFixed(2));
+
+                // Atualizar exibições
+                currentBalanceDisplay.textContent = "R$" + currentBalance.toFixed(2);
+                alert(`Você finalizou o jogo e levou R$${totalGain.toFixed(2)}!`);
+
+                // Resetar o jogo
+                currentBet = 0;
+                currentBetDisplay.textContent = "R$0,00";
+                potentialGainDisplay.textContent = "R$0,00";
+                cashOutButton.disabled = true;
+
+                // Resetar a posição do goleiro
+                const goalkeeper = document.querySelector(".goalkeeper");
+                goalkeeper.classList.remove(
+                    "goalkeeper-top-left",
+                    "goalkeeper-top-center",
+                    "goalkeeper-top-right",
+                    "goalkeeper-bottom-left",
+                    "goalkeeper-bottom-center",
+                    "goalkeeper-bottom-right"
+                );
+            });
+        };
+    </script>
+</body>
+</html>

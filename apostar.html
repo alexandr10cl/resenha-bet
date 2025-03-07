@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resenha.bet - Apostas entre Amigos</title>
+    <link rel="stylesheet" href="apostar.css">
+</head>
+<body>
+    <!-- Cabeçalho -->
+    <header>
+        <div class="header-container">
+            <div class="logo">resenha<span>.bet</span></div>
+            <div class="user-actions">
+                <div id="userInfo">
+                    <span id="usernameDisplay"></span>
+                    <span id="userBalance"></span>
+                </div>
+                <div id="loginActions">
+                    <a href="login.html" class="btn btn-login">Entrar</a>
+                    <a href="login.html" class="btn btn-register">Cadastre-se</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Navegação -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Início</a>
+                <a href="#" class="nav-link active">Apostas Só resenha</a>
+                <a href="penalti.html" class="nav-link">Bater Pênaltis</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Conteúdo Principal -->
+    <div class="main-content">
+        <div class="page-title">
+            <h1>Apostas Só Resenha</h1>
+            <p>Faça seus palpites e acompanhe os resultados com os amigos</p>
+        </div>
+        
+        <!-- Apostas Disponíveis -->
+        <div class="bets-container">
+            
+            <div class="bet-card">
+                <div class="bet-header">
+                    <div class="bet-title">Qual será a camisa do Salada hoje?</div>
+                    <div class="bet-closing">Fecha em 2h</div>
+                </div>
+                <div class="bet-content">
+                    <div class="bet-description">
+                        Saturno está sempre surpreendendo com suas escolhas de roupa. Qual cor de camisa ele vai usar na saída de hoje?
+                    </div>
+                    
+                    <div class="bet-options">
+                        <div class="bet-option">
+                            <span class="option-name">Thug Nine Bege</span>
+                            <span class="option-odds">2.0</span>
+                        </div>
+                        <div class="bet-option">
+                            <span class="option-name">Preta Billabong</span>
+                            <span class="option-odds">3.5</span>
+                        </div>
+                        <div class="bet-option">
+                            <span class="option-name">Branca da vans</span>
+                            <span class="option-odds">1.5</span>
+                        </div>
+                        <div class="bet-option">
+                            <span class="option-name">Branca Quicksilver</span>
+                            <span class="option-odds">4.0</span>
+                        </div>
+                        <div class="bet-option">
+                            <span class="option-name">Nova</span>
+                            <span class="option-odds">10.0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bet-amount">
+                        <div class="bet-amount-label">
+                            <span>Valor da aposta</span>
+                            <small>Min: R$1,00 | Max: R$5,00</small>
+                        </div>
+                        <div class="amount-input">
+                            <span>R$</span>
+                            <input type="number" placeholder="10,00" min="5" max="50">
+                        </div>
+                    </div>
+                    
+                    <div class="bet-stats">
+                        <div class="bet-stat">
+                            <div class="bet-stat-label">Total apostado</div>
+                            <div class="bet-stat-value" id="totalApostado">R$0,00</div>
+                        </div>
+                        <div class="bet-stat">
+                            <div class="bet-stat-label">Possível ganho</div>
+                            <div class="bet-stat-value" id="possivelGanho">R$0,00</div>
+                        </div>
+                    </div>
+                    
+                    <button class="bet-button" id="betButton">APOSTAR</button>
+
+                    <!-- Mensagem de agradecimento (inicialmente oculta) -->
+                    <div id="thankYouMessage">
+                        <p>Obrigado por Apostar!</p>
+                        <p>Tire print da sua aposta e envie no grupo Só Resenha para validar sua aposta.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comprovante de aposta (inicialmente oculto) -->
+        <div id="comprovanteAposta">
+            <h3>Comprovante de Aposta</h3>
+            <p><strong>Nome do Apostador:</strong> <span id="comprovanteNome"></span></p>
+            <p><strong>Opção Escolhida:</strong> <span id="comprovanteOpcao"></span></p>
+            <p><strong>Valor Apostado:</strong> <span id="comprovanteValor"></span></p>
+            <p><strong>Potencial Ganho:</strong> <span id="comprovanteGanho"></span></p>
+            <p>Tire print deste comprovante e envie no grupo Só Resenha para validar sua aposta.</p>
+        </div>
+    </div>
+    
+    <!-- Rodapé -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 Resenha.bet - Sua plataforma de apostas entre amigos</p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // Função para obter valor de cookies
+function getCookie(name) {
+    const cname = name + "=";
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(cname) === 0) {
+            return c.substring(cname.length, c.length);
+        }
+    }
+    return "";
+}
+
+// Função para atualizar o saldo no cookie
+function updateBalance(newBalance) {
+    const date = new Date();
+    date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000)); // 7 dias de validade
+    const expires = "expires=" + date.toUTCString();
+    document.cookie = "resenha_balance=" + newBalance + ";" + expires + ";path=/";
+}
+
+// Verificar se o usuário está logado
+window.onload = function () {
+    const username = getCookie("resenha_username");
+    const balance = getCookie("resenha_balance");
+
+    const userInfo = document.getElementById("userInfo");
+    const loginActions = document.getElementById("loginActions");
+
+    if (username) {
+        // Usuário está logado: mostrar nome e saldo
+        userInfo.style.display = "flex"; // Mostrar o bloco de informações do usuário
+        loginActions.style.display = "none"; // Esconder os botões de login/cadastro
+
+        // Atualizar o nome e saldo no cabeçalho
+        document.getElementById("usernameDisplay").textContent = username;
+        document.getElementById("userBalance").textContent = "R$" + balance;
+    } else {
+        // Usuário não está logado: mostrar botões de login/cadastro
+        window.location.href = "login.html";
+    }
+
+    // Elementos do DOM
+    const betOptions = document.querySelectorAll(".bet-option");
+    const amountInput = document.querySelector(".amount-input input");
+    const totalApostado = document.getElementById("totalApostado");
+    const possivelGanho = document.getElementById("possivelGanho");
+    const betButton = document.getElementById("betButton"); // Selecionar o botão de apostar pelo ID
+    const thankYouMessage = document.getElementById("thankYouMessage"); // Selecionar a mensagem de agradecimento
+
+    let selectedOdd = null;
+    let betAmount = 0;
+
+    // Adicionar evento de clique nas opções de aposta
+    betOptions.forEach(option => {
+        option.addEventListener("click", () => {
+            // Remover a seleção anterior
+            betOptions.forEach(opt => opt.classList.remove("selected"));
+            // Selecionar a opção clicada
+            option.classList.add("selected");
+            // Pegar o valor da odd
+            selectedOdd = parseFloat(option.querySelector(".option-odds").textContent);
+            // Calcular o possível ganho
+            calculatePossibleGain();
+        });
+    });
+
+    // Adicionar evento de input no campo de valor da aposta
+    amountInput.addEventListener("input", () => {
+        betAmount = parseFloat(amountInput.value) || 0; // Garantir que seja um número
+        totalApostado.textContent = "R$" + betAmount.toFixed(2); // Atualizar o total apostado
+        calculatePossibleGain(); // Recalcular o possível ganho
+    });
+
+    // Função para calcular o possível ganho
+    function calculatePossibleGain() {
+        if (betAmount && selectedOdd) {
+            const gain = (betAmount * selectedOdd).toFixed(2);
+            possivelGanho.textContent = "R$" + gain;
+        } else {
+            possivelGanho.textContent = "R$0,00";
+        }
+    }
+
+        // Adicionar evento de clique no botão de apostar
+    betButton.addEventListener("click", () => {
+        const currentBalance = parseFloat(balance);
+
+        if (!betAmount || betAmount <= 0) {
+            alert("Por favor, insira um valor válido para a aposta.");
+            return;
+        }
+
+        if (betAmount > currentBalance) {
+            alert("Saldo insuficiente para realizar a aposta.");
+            return;
+        }
+
+        if (!selectedOdd) {
+            alert("Por favor, selecione uma opção de aposta.");
+            return;
+        }
+
+        // Atualizar o saldo
+        const newBalance = (currentBalance - betAmount).toFixed(2);
+        updateBalance(newBalance);
+        document.getElementById("userBalance").textContent = "R$" + newBalance;
+
+        // Gerar comprovante de aposta
+        const comprovanteAposta = document.getElementById("comprovanteAposta");
+        const comprovanteNome = document.getElementById("comprovanteNome");
+        const comprovanteOpcao = document.getElementById("comprovanteOpcao");
+        const comprovanteValor = document.getElementById("comprovanteValor");
+        const comprovanteGanho = document.getElementById("comprovanteGanho");
+
+        // Preencher os dados do comprovante
+        comprovanteNome.textContent = getCookie("resenha_username"); // Nome do apostador
+        comprovanteOpcao.textContent = document.querySelector(".bet-option.selected .option-name").textContent; // Opção escolhida
+        comprovanteValor.textContent = "R$" + betAmount.toFixed(2); // Valor apostado
+        comprovanteGanho.textContent = "R$" + (betAmount * selectedOdd).toFixed(2); // Potencial ganho
+
+        // Exibir o comprovante
+        comprovanteAposta.style.display = "block";
+
+        // Exibir mensagem de sucesso
+        alert("Aposta realizada com sucesso! Boa sorte!");
+
+        // Resetar o formulário
+        amountInput.value = "";
+        betOptions.forEach(opt => opt.classList.remove("selected"));
+        totalApostado.textContent = "R$0,00";
+        possivelGanho.textContent = "R$0,00";
+    });
+};
+    </script>
+</body>
+</html>
